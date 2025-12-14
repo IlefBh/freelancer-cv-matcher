@@ -1,0 +1,2 @@
+py -m scripts.run_scrape
+py -m scripts.run_clean
