@@ -2,7 +2,7 @@ import argparse
 import pandas as pd
 
 from src.cv_parser.cv_text import extract_cv_text, build_profile_text
-from src.matching.tfidf_matcher import match_projects_tfidf
+from src.matching.tfidf_matcher import TfidfMatcher
 
 
 def main():
@@ -15,7 +15,9 @@ def main():
     cv_text = extract_cv_text(args.cv)
     profile_text = build_profile_text(cv_text)
 
-    results = match_projects_tfidf(projects, profile_text, top_k=args.k)
+    matcher = TfidfMatcher()
+    results = matcher.match(projects, profile_text, top_k=args.k)
+
     print(results.to_string(index=False))
 
     results.to_csv("data/processed/cv_project_matches.csv", index=False, encoding="utf-8-sig")

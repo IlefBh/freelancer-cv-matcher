@@ -6,7 +6,7 @@ import pandas as pd
 import streamlit as st
 
 from src.cv_parser.cv_text import extract_cv_text, build_profile_text
-from src.matching.tfidf_matcher import match_projects_tfidf
+from src.matching.tfidf_matcher import TfidfMatcher
 from io import BytesIO
 
 APP_TITLE = "Freelancer CV Matcher"
@@ -119,7 +119,8 @@ def main():
         projects = load_projects()
         cv_text = extract_cv_text(str(saved_path))
         profile_text = build_profile_text(cv_text)
-        results = match_projects_tfidf(projects, profile_text, top_k=top_k)
+        matcher = TfidfMatcher()
+        results = matcher.match(projects, profile_text, top_k=top_k)
     except Exception as e:
         st.error(f"Error while matching: {e}")
         return

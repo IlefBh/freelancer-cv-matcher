@@ -1,6 +1,8 @@
 import pandas as pd
-from src.scraping.freelancer_scraper import scrape_projects
+
+from src.scraping.freelancer_scraper import Config, FreelancerScraper
 from src.config import RAW_CSV_PATH
+
 
 def main():
     categories = {
@@ -11,10 +13,18 @@ def main():
         "Mobile Apps": "jobs/mobile-phone/",
     }
 
-    rows = scrape_projects(categories, pages_per_category=3, headless=False)
+    cfg = Config(
+        headless=False,
+        max_pages_per_category=3,
+    )
+
+    with FreelancerScraper(cfg) as scraper:
+        rows = scraper.scrape_projects(categories)
+
     df = pd.DataFrame(rows)
     df.to_csv(RAW_CSV_PATH, index=False, encoding="utf-8-sig")
     print(f"Saved raw data to: {RAW_CSV_PATH} ({len(df)} rows)")
+
 
 if __name__ == "__main__":
     main()
