@@ -19,9 +19,6 @@ def ensure_dirs():
 
 
 def save_uploaded_cv(uploaded_file) -> Path:
-    """
-    Save uploaded CV under inputs/ as my_cv.<ext>
-    """
     ensure_dirs()
     suffix = Path(uploaded_file.name).suffix.lower()
     if suffix not in [".pdf", ".docx"]:
@@ -48,28 +45,86 @@ def ui_inject_css():
     st.markdown(
         """
         <style>
-          .block-container { padding-top: 1.2rem; padding-bottom: 2rem; max-width: 1100px; }
-          .stButton>button { border-radius: 12px; padding: 0.6rem 1rem; }
-          .badge {
-            display:inline-block; padding: 0.25rem 0.55rem; border-radius: 999px;
-            font-size: 0.78rem; margin-right: 0.4rem; border: 1px solid rgba(255,255,255,0.12);
-          }
-          .card {
-            padding: 1rem 1.1rem; border-radius: 16px;
-            border: 1px solid rgba(255,255,255,0.10);
-            background: rgba(255,255,255,0.03);
-            margin-bottom: 0.85rem;
-          }
-          .title {
-            font-size: 1.05rem; font-weight: 650; line-height: 1.2;
-            margin-bottom: 0.45rem;
-          }
-          .muted { opacity: 0.75; font-size: 0.9rem; }
-          .score {
-            font-variant-numeric: tabular-nums;
+        /* Layout */
+        .block-container {
+            padding-top: 1.2rem;
+            padding-bottom: 2rem;
+            max-width: 1100px;
+        }
+
+        /* Buttons */
+        .stButton > button {
+            border-radius: 14px;
+            padding: 0.65rem 1.1rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #6C63FF, #4FD1C5);
+            color: white;
+            border: none;
+        }
+
+        /* Cards */
+        .card {
+            padding: 1rem 1.1rem;
+            border-radius: 18px;
+            border: 1px solid #E5E7EB;
+            background: #FFFFFF;
+            margin-bottom: 0.9rem;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+            transition: all 0.2s ease-in-out;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(108,99,255,0.25);
+        }
+
+        /* Title */
+        .title {
+            font-size: 1.1rem;
             font-weight: 700;
-          }
-          a { text-decoration: none !important; }
+            line-height: 1.25;
+            margin-bottom: 0.45rem;
+        }
+
+        .title a {
+            color: #111827;
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 0.28rem 0.6rem;
+            border-radius: 999px;
+            font-size: 0.78rem;
+            margin-right: 0.4rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .badge:nth-child(1) { background: #6C63FF; }
+        .badge:nth-child(2) { background: #10B981; }
+        .badge:nth-child(3) { background: #F59E0B; color: #1F2937; }
+        .badge:nth-child(4) { background: #EF4444; }
+        .badge:nth-child(5) { background: #3B82F6; }
+
+        /* Score */
+        .score {
+            font-variant-numeric: tabular-nums;
+            font-weight: 800;
+            background: linear-gradient(90deg, #10B981, #3B82F6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Muted */
+        .muted {
+            color: #6B7280;
+            font-size: 0.9rem;
+        }
+
+        a {
+            text-decoration: none !important;
+        }
         </style>
         """,
         unsafe_allow_html=True,

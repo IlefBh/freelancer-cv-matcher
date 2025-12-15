@@ -49,8 +49,4 @@ def extract_cv_text(path: str) -> str:
 
 
 def build_profile_text(cv_text: str) -> str:
-    """
-    Keep it simple: cleaned CV text is enough for TF-IDF matching.
-    Later you can add skill extraction / section weighting if you want.
-    """
     return _clean_text(cv_text)

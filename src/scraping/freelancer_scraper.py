@@ -48,7 +48,7 @@ class FreelancerScraper:
         self.config = config
         self.driver: Optional[webdriver.Chrome] = None
 
-    # ✅ Context manager: with FreelancerScraper(...) as s:
+    # Context manager: with FreelancerScraper(...) as s:
     def __enter__(self) -> "FreelancerScraper":
         self.driver = self._setup_driver(self.config.headless)
         return self
