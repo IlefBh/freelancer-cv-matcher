@@ -6,3 +6,4 @@ python-docx
 pdfplumber
 streamlit
 openpyxl
+matplotlib

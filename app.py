@@ -8,6 +8,20 @@ import streamlit as st
 from src.cv_parser.cv_text import extract_cv_text, build_profile_text
 from src.matching.tfidf_matcher import TfidfMatcher
 from io import BytesIO
+import matplotlib.pyplot as plt
+
+plt.rcParams.update({
+    "figure.figsize": (8, 4),
+    "figure.dpi": 110,
+    "axes.titlesize": 13,
+    "axes.labelsize": 11,
+    "axes.grid": True,
+    "grid.alpha": 0.3,
+    "axes.spines.top": False,
+    "axes.spines.right": False,
+})
+
+
 
 APP_TITLE = "Freelancer CV Matcher"
 INPUTS_DIR = Path("inputs")
@@ -130,6 +144,65 @@ def ui_inject_css():
         unsafe_allow_html=True,
     )
 
+def plot_score_distribution(results):
+    fig, ax = plt.subplots(figsize=(8, 4))
+
+    ax.hist(
+        results["score"],
+        bins=15,
+        color="#6C63FF",
+        edgecolor="white",
+        alpha=0.85
+    )
+
+    ax.set_title("Distribution of similarity scores")
+    ax.set_xlabel("Cosine similarity")
+    ax.set_ylabel("Number of projects")
+
+    st.pyplot(fig)
+
+
+
+def plot_topk_scores(results):
+    top = results.head(10)
+
+    fig, ax = plt.subplots(figsize=(8, 5))
+
+    ax.barh(
+        top["title"],
+        top["score"],
+        color="#4FD1C5"
+    )
+
+    ax.invert_yaxis()
+    ax.set_title("Top 10 matched projects")
+    ax.set_xlabel("Cosine similarity")
+
+    st.pyplot(fig)
+
+
+
+def plot_score_vs_bids(results):
+    if "bids_count" not in results.columns:
+        return
+
+    fig, ax = plt.subplots(figsize=(8, 4))
+
+    ax.scatter(
+        results["bids_count"],
+        results["score"],
+        color="#F59E0B",
+        alpha=0.75,
+        edgecolors="white"
+    )
+
+    ax.set_title("Match quality vs competition")
+    ax.set_xlabel("Number of bids")
+    ax.set_ylabel("Cosine similarity")
+
+    st.pyplot(fig)
+
+
 
 def main():
     st.set_page_config(page_title=APP_TITLE, page_icon="🧩", layout="centered")
@@ -194,6 +267,15 @@ def main():
     m3.metric("Top score", f"{results['score'].max():.3f}" if len(results) else "—")
 
     st.divider()
+
+    st.subheader("Match insights")
+
+    plot_score_distribution(results)
+    plot_topk_scores(results)
+    plot_score_vs_bids(results)
+
+    st.divider()
+
 
     if len(results) == 0:
         st.warning("No results match your filters. Try lowering the minimum score or removing filters.")
